@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "世界": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "日期": {
+          "default": "承熙十二年八月十五",
+          "type": "string"
+        },
+        "时辰": {
+          "default": "戌时",
+          "type": "string"
+        },
+        "当前地点": {
+          "default": "京畿·长亭破庙",
+          "type": "string"
+        }
+      }
+    },
+    "锁情册": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "签契者": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "首次写下愿望者的姓名"
+          },
+          "additionalProperties": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "档案来源": {
+                "default": "动态档案",
+                "type": "string",
+                "enum": [
+                  "核心档案",
+                  "动态档案"
+                ]
+              },
+              "档案覆盖": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "姓名": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "性别": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "年龄": {
+                    "default": 18,
+                    "type": "number"
+                  },
+                  "身高": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "胸部大小": {
+                    "default": "不适用",
+                    "type": "string"
+                  },
+                  "宗门": {
+                    "default": "无",
+                    "type": "string"
+                  },
+                  "武学": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "详细人物小传": {
+                    "default": "暂无档案",
+                    "type": "string"
+                  }
+                }
+              },
+              "当前契约": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "愿望": {
+                    "default": "未填写",
+                    "type": "string"
+                  },
+                  "代价": {
+                    "default": "待<user>填写",
+                    "type": "string"
+                  },
+                  "履约进度": {
+                    "default": "待填写代价",
+                    "type": "string",
+                    "enum": [
+                      "无当前契约",
+                      "待填写代价",
+                      "待许愿者确认",
+                      "愿望实现中",
+                      "待履行代价",
+                      "履约中",
+                      "长期履约中",
+                      "已完成",
+                      "已作废"
+                    ]
+                  }
+                }
+              },
+              "历史契约": {
+                "default": {},
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "description": "契约编号"
+                },
+                "additionalProperties": {
+                  "default": {},
+                  "type": "object",
+                  "properties": {
+                    "愿望": {
+                      "default": "未记录",
+                      "type": "string"
+                    },
+                    "代价": {
+                      "default": "未记录",
+                      "type": "string"
+                    },
+                    "结果": {
+                      "default": "未记录",
+                      "type": "string"
+                    },
+                    "结契时间": {
+                      "default": "未知",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
