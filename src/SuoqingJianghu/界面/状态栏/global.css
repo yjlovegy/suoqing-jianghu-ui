@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --c-surface: #ffffff;
+  --c-surface-subtle: #f7f7f5;
+  --c-surface-selected: #f1f1ee;
+  --c-text: #171717;
+  --c-text-secondary: #686868;
+  --c-text-faint: #969696;
+  --c-border: #e4e4e1;
+  --c-border-strong: #c9c9c4;
+  --c-accent: #1f1f1f;
+  --c-progress: #4f6256;
+  --c-warning: #8b5a2b;
+  --font-interface: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'Microsoft YaHei', serif;
+  color-scheme: light;
+}
+
+html,
+body {
+  min-width: 0;
+  background: transparent;
+  color: var(--c-text);
+  font-family: var(--font-interface);
+}
+
+button {
+  color: inherit;
+  font: inherit;
+}
