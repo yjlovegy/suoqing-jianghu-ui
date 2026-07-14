@@ -5,7 +5,7 @@
         <p class="book-kicker">SUOQING REGISTER</p>
         <h1>锁情册</h1>
       </div>
-      <p class="world-mark">{{ store.stat_data.世界.日期 }} · {{ store.stat_data.世界.时辰 }}<br />{{ store.stat_data.世界.当前地点 }}</p>
+      <p class="world-mark">{{ store.data.世界.日期 }} · {{ store.data.世界.时辰 }}<br />{{ store.data.世界.当前地点 }}</p>
     </header>
 
     <div class="book-layout">
@@ -24,8 +24,8 @@ import { useDataStore } from './store';
 const store = useDataStore();
 const selectedName = ref('');
 
-const signerNames = computed(() => Object.keys(store.stat_data.锁情册.签契者));
-const selectedRecord = computed(() => store.stat_data.锁情册.签契者[selectedName.value] ?? null);
+const signerNames = computed(() => Object.keys(store.data.锁情册.签契者));
+const selectedRecord = computed(() => store.data.锁情册.签契者[selectedName.value] ?? null);
 
 watch(
   signerNames,
