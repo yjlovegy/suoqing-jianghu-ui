@@ -1,0 +1,160 @@
+export const Schema = z.object({
+  系统: z.object({
+    阶段: z.enum(['开场选择', '自由探索', '赌约协商', '牌局准备', '牌局进行', '牌局结算', '赌约履行']).prefault('开场选择'),
+    当前区域: z.enum(['镜门大堂', '绯金主厅', '黑曜贵宾厅', '琥珀餐厅', '夜莺剧场', '月白水庭', '鎏光艺廊', '皇冠套房区']).prefault('镜门大堂'),
+    当前房间: z.string().prefault('迎宾门厅'),
+    当前玩法: z.enum(['无', '骰子比大小', '德州扑克', '二十一点', '欧式轮盘']).prefault('无'),
+  }).prefault({}),
+  资产: z.object({
+    筹码预设: z.enum(['未选择', '稳健100万美元', '豪客300万美元', '自定义']).prefault('未选择'),
+    玩家筹码: z.object({
+      大筹码: z.coerce.number().transform(value => _.clamp(Math.floor(Number.isFinite(value) ? value : 0), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      小筹码: z.coerce.number().transform(value => _.clamp(Math.floor(Number.isFinite(value) ? value : 0), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+    }).prefault({}),
+  }).prefault({}),
+  人物: z.object({
+    活动角色: z.record(
+      z.string().describe('稳定角色ID'),
+      z.object({
+        姓名: z.string().prefault('未命名'),
+        年龄: z.coerce.number().transform(value => _.clamp(Math.floor(value), 18, 30)).prefault(18),
+        身高: z.coerce.number().transform(value => _.clamp(Math.floor(value), 160, 172)).prefault(160),
+        身份: z.string().prefault('访客'),
+        角色类别: z.enum(['荷官', '安保', '服务人员', '其他工作人员', '赌客']).prefault('赌客'),
+        衣着: z.object({
+          上衣: z.string().prefault('未知'),
+          下装: z.string().prefault('未知'),
+          鞋子: z.string().prefault('未知'),
+          内衣: z.object({
+            是否已知: z.boolean().prefault(false),
+            描述: z.string().prefault('未知'),
+          }).prefault({}).transform(value => value.是否已知 ? value : { ...value, 描述: '未知' }),
+        }).prefault({}),
+        所持筹码: z.object({
+          大筹码: z.coerce.number().transform(value => _.clamp(Math.floor(Number.isFinite(value) ? value : 0), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+          小筹码: z.coerce.number().transform(value => _.clamp(Math.floor(Number.isFinite(value) ? value : 0), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+        }).prefault({}),
+        当前赌约ID: z.string().prefault(''),
+        私密信息: z.object({
+          朱唇: z.object({ 是否已知: z.boolean().prefault(false), 描述: z.string().prefault('未知') }).prefault({}).transform(value => value.是否已知 ? value : { ...value, 描述: '未知' }),
+          双峰: z.object({ 是否已知: z.boolean().prefault(false), 描述: z.string().prefault('未知'), 罩杯: z.enum(['C', 'D', 'E']).prefault('C') }).prefault({}).transform(value => value.是否已知 ? value : { ...value, 描述: '未知' }),
+          幽谷: z.object({ 是否已知: z.boolean().prefault(false), 描述: z.string().prefault('未知') }).prefault({}).transform(value => value.是否已知 ? value : { ...value, 描述: '未知' }),
+          双丘: z.object({ 是否已知: z.boolean().prefault(false), 描述: z.string().prefault('未知') }).prefault({}).transform(value => value.是否已知 ? value : { ...value, 描述: '未知' }),
+          玉足: z.object({ 是否已知: z.boolean().prefault(false), 描述: z.string().prefault('未知') }).prefault({}).transform(value => value.是否已知 ? value : { ...value, 描述: '未知' }),
+        }).prefault({}),
+        行为锚点: z.record(z.string(), z.string()).prefault({}),
+        说话习惯: z.string().prefault('未记录'),
+        赌博风格: z.string().prefault('未记录'),
+      }).prefault({}),
+    ).prefault({}),
+    _离场索引: z.record(
+      z.string().describe('稳定角色ID'),
+      z.object({
+        姓名: z.string().prefault('未命名'),
+        年龄: z.coerce.number().transform(value => _.clamp(Math.floor(value), 18, 30)).prefault(18),
+        身高: z.coerce.number().transform(value => _.clamp(Math.floor(value), 160, 172)).prefault(160),
+        身份: z.string().prefault('访客'),
+        角色类别: z.enum(['荷官', '安保', '服务人员', '其他工作人员', '赌客']).prefault('赌客'),
+        最近离场区域: z.string().prefault('未知'),
+        最近离场房间: z.string().prefault('未知'),
+      }).prefault({}),
+    ).prefault({}).transform(value => Object.fromEntries(Object.entries(value).slice(-30))),
+    $离场详档: z.record(z.string().describe('稳定角色ID'), z.record(z.string(), z.unknown())).prefault({}),
+  }).prefault({}),
+  赌约: z.object({
+    当前赌约: z.object({
+      ID: z.string().prefault(''),
+      双方: z.object({ 甲方: z.string().prefault(''), 乙方: z.string().prefault('') }).prefault({}),
+      各自押注: z.object({ 甲方: z.string().prefault(''), 乙方: z.string().prefault('') }).prefault({}),
+      胜负条件: z.string().prefault(''),
+      确认状态: z.object({ 甲方: z.boolean().prefault(false), 乙方: z.boolean().prefault(false) }).prefault({}),
+      状态: z.enum(['无', '协商中', '已确认', '进行中', '已结算', '已取消']).prefault('无'),
+      胜者: z.string().prefault(''),
+      结果: z.string().prefault(''),
+      履行状态: z.enum(['无需履行', '待履行', '履行中', '已完成', '已放弃']).prefault('无需履行'),
+    }).prefault({}),
+  }).prefault({}),
+  _牌局公开状态: z.object({
+    牌局ID: z.string().prefault(''),
+    玩法: z.enum(['无', '骰子比大小', '德州扑克', '二十一点', '欧式轮盘']).prefault('无'),
+    牌局阶段: z.string().prefault('未开始'),
+    可操作楼层ID: z.coerce.number().transform(value => _.clamp(Math.floor(value), -1, Number.MAX_SAFE_INTEGER)).prefault(-1),
+    当前行动角色ID: z.string().prefault(''),
+    座次: z.record(z.string().describe('座位ID'), z.object({
+      角色ID: z.string().prefault(''), 显示名: z.string().prefault(''),
+      座位号: z.coerce.number().transform(value => _.clamp(Math.floor(value), 1, Number.MAX_SAFE_INTEGER)).prefault(1),
+      筹码: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      本轮投入: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      总投入: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      状态: z.enum(['等待', '行动中', '已过牌', '已跟注', '已下注', '已加注', '已弃牌', '已全下', '已停牌', '已爆牌', '已结算']).prefault('等待'),
+    }).prefault({})).prefault({}),
+    底池: z.object({
+      主池: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      边池: z.array(z.object({
+        金额: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+        可争夺角色ID: z.array(z.string()).prefault([]),
+      }).prefault({})).prefault([]),
+    }).prefault({}),
+    公开牌: z.array(z.string()).prefault([]),
+    骰点: z.record(z.string().describe('角色ID'), z.array(z.coerce.number().transform(value => _.clamp(Math.floor(value), 1, 6)))).prefault({}),
+    轮盘结果: z.union([z.null(), z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, 36))]).prefault(null),
+    合法动作: z.array(z.object({
+      ID: z.string().prefault(''), 标签: z.string().prefault(''),
+      最小值: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      最大值: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      步长: z.coerce.number().transform(value => _.clamp(Math.floor(value), 1, Number.MAX_SAFE_INTEGER)).prefault(1),
+      需要数值: z.boolean().prefault(false),
+    }).prefault({})).prefault([]),
+    德州扑克: z.object({
+      按钮座位ID: z.string().prefault(''),
+      小盲: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(1),
+      大盲: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(2),
+      当前下注: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      最小加注至: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      已公开手牌: z.record(z.string().describe('角色ID'), z.array(z.string())).prefault({}),
+      牌型: z.record(z.string().describe('角色ID'), z.string()).prefault({}),
+    }).prefault({}),
+    二十一点: z.object({
+      玩家各手: z.record(z.string().describe('手牌ID'), z.object({
+        角色ID: z.string().prefault(''), 牌: z.array(z.string()).prefault([]),
+        点数: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, 31)).prefault(0),
+        下注: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+        状态: z.string().prefault('等待'), 天然黑杰克: z.boolean().prefault(false),
+      }).prefault({})).prefault({}),
+      庄家明牌: z.array(z.string()).prefault([]),
+      庄家点数: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, 31)).prefault(0),
+      保险开放: z.boolean().prefault(false),
+    }).prefault({}),
+    欧式轮盘: z.object({
+      下注: z.record(z.string().describe('下注ID'), z.object({
+        注型: z.enum(['单号', '分注', '街注', '三数注', '角注', '首四注', '线注', '列注', '打注', '红黑', '单双', '大小']).prefault('单号'),
+        覆盖号码: z.array(z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, 36))).prefault([]),
+        选择: z.string().prefault(''),
+        筹码: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+        净赔率: z.coerce.number().transform(value => _.clamp(Math.floor(value), 1, 35)).prefault(35),
+        结果: z.enum(['待定', '赢', '输']).prefault('待定'),
+        派彩: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      }).prefault({})).prefault({}),
+      开放下注: z.boolean().prefault(false),
+    }).prefault({}),
+    事件日志: z.array(z.object({
+      序号: z.coerce.number().transform(value => _.clamp(Math.floor(value), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
+      类型: z.string().prefault('系统'), 文本: z.string().prefault(''), 时间: z.string().prefault(''),
+    }).prefault({})).prefault([]).transform(items => items.slice(-100)),
+  }).prefault({}),
+  $牌局隐藏状态: z.object({
+    牌堆: z.array(z.string()).prefault([]),
+    未公开手牌: z.record(z.string().describe('角色ID'), z.array(z.string())).prefault({}),
+    庄家暗牌: z.string().prefault(''),
+    随机结果: z.record(z.string(), z.union([z.string(), z.boolean(), z.null(), z.coerce.number()])).prefault({}),
+    待处理决策: z.record(z.string().describe('角色ID'), z.string()).prefault({}),
+    事务: z.object({
+      ID: z.string().prefault(''),
+      状态: z.enum(['空闲', '暂存', '生成中', '可提交', '失败']).prefault('空闲'),
+      前置楼层ID: z.coerce.number().transform(value => _.clamp(Math.floor(value), -1, Number.MAX_SAFE_INTEGER)).prefault(-1),
+      错误: z.string().prefault(''),
+    }).prefault({}),
+  }).prefault({}),
+});
+
+export type Schema = z.output<typeof Schema>;

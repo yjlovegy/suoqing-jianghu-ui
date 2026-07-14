@@ -1,0 +1,933 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "阶段": {
+          "default": "开场选择",
+          "type": "string",
+          "enum": [
+            "开场选择",
+            "自由探索",
+            "赌约协商",
+            "牌局准备",
+            "牌局进行",
+            "牌局结算",
+            "赌约履行"
+          ]
+        },
+        "当前区域": {
+          "default": "镜门大堂",
+          "type": "string",
+          "enum": [
+            "镜门大堂",
+            "绯金主厅",
+            "黑曜贵宾厅",
+            "琥珀餐厅",
+            "夜莺剧场",
+            "月白水庭",
+            "鎏光艺廊",
+            "皇冠套房区"
+          ]
+        },
+        "当前房间": {
+          "default": "迎宾门厅",
+          "type": "string"
+        },
+        "当前玩法": {
+          "default": "无",
+          "type": "string",
+          "enum": [
+            "无",
+            "骰子比大小",
+            "德州扑克",
+            "二十一点",
+            "欧式轮盘"
+          ]
+        }
+      }
+    },
+    "资产": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "筹码预设": {
+          "default": "未选择",
+          "type": "string",
+          "enum": [
+            "未选择",
+            "稳健100万美元",
+            "豪客300万美元",
+            "自定义"
+          ]
+        },
+        "玩家筹码": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "大筹码": {
+              "default": 0,
+              "type": "number"
+            },
+            "小筹码": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "人物": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "活动角色": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "稳定角色ID"
+          },
+          "additionalProperties": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "姓名": {
+                "default": "未命名",
+                "type": "string"
+              },
+              "年龄": {
+                "default": 18,
+                "type": "number"
+              },
+              "身高": {
+                "default": 160,
+                "type": "number"
+              },
+              "身份": {
+                "default": "访客",
+                "type": "string"
+              },
+              "角色类别": {
+                "default": "赌客",
+                "type": "string",
+                "enum": [
+                  "荷官",
+                  "安保",
+                  "服务人员",
+                  "其他工作人员",
+                  "赌客"
+                ]
+              },
+              "衣着": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "上衣": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "下装": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "鞋子": {
+                    "default": "未知",
+                    "type": "string"
+                  },
+                  "内衣": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "是否已知": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "描述": {
+                        "default": "未知",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "所持筹码": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "大筹码": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "小筹码": {
+                    "default": 0,
+                    "type": "number"
+                  }
+                }
+              },
+              "当前赌约ID": {
+                "default": "",
+                "type": "string"
+              },
+              "私密信息": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "朱唇": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "是否已知": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "描述": {
+                        "default": "未知",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "双峰": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "是否已知": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "描述": {
+                        "default": "未知",
+                        "type": "string"
+                      },
+                      "罩杯": {
+                        "default": "C",
+                        "type": "string",
+                        "enum": [
+                          "C",
+                          "D",
+                          "E"
+                        ]
+                      }
+                    }
+                  },
+                  "幽谷": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "是否已知": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "描述": {
+                        "default": "未知",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "双丘": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "是否已知": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "描述": {
+                        "default": "未知",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "玉足": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "是否已知": {
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "描述": {
+                        "default": "未知",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "行为锚点": {
+                "default": {},
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "说话习惯": {
+                "default": "未记录",
+                "type": "string"
+              },
+              "赌博风格": {
+                "default": "未记录",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "_离场索引": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "稳定角色ID"
+          },
+          "additionalProperties": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "姓名": {
+                "default": "未命名",
+                "type": "string"
+              },
+              "年龄": {
+                "default": 18,
+                "type": "number"
+              },
+              "身高": {
+                "default": 160,
+                "type": "number"
+              },
+              "身份": {
+                "default": "访客",
+                "type": "string"
+              },
+              "角色类别": {
+                "default": "赌客",
+                "type": "string",
+                "enum": [
+                  "荷官",
+                  "安保",
+                  "服务人员",
+                  "其他工作人员",
+                  "赌客"
+                ]
+              },
+              "最近离场区域": {
+                "default": "未知",
+                "type": "string"
+              },
+              "最近离场房间": {
+                "default": "未知",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "$离场详档": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "稳定角色ID"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        }
+      }
+    },
+    "赌约": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前赌约": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "ID": {
+              "default": "",
+              "type": "string"
+            },
+            "双方": {
+              "default": {},
+              "type": "object",
+              "properties": {
+                "甲方": {
+                  "default": "",
+                  "type": "string"
+                },
+                "乙方": {
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            },
+            "各自押注": {
+              "default": {},
+              "type": "object",
+              "properties": {
+                "甲方": {
+                  "default": "",
+                  "type": "string"
+                },
+                "乙方": {
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            },
+            "胜负条件": {
+              "default": "",
+              "type": "string"
+            },
+            "确认状态": {
+              "default": {},
+              "type": "object",
+              "properties": {
+                "甲方": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "乙方": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              }
+            },
+            "状态": {
+              "default": "无",
+              "type": "string",
+              "enum": [
+                "无",
+                "协商中",
+                "已确认",
+                "进行中",
+                "已结算",
+                "已取消"
+              ]
+            },
+            "胜者": {
+              "default": "",
+              "type": "string"
+            },
+            "结果": {
+              "default": "",
+              "type": "string"
+            },
+            "履行状态": {
+              "default": "无需履行",
+              "type": "string",
+              "enum": [
+                "无需履行",
+                "待履行",
+                "履行中",
+                "已完成",
+                "已放弃"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "_牌局公开状态": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "牌局ID": {
+          "default": "",
+          "type": "string"
+        },
+        "玩法": {
+          "default": "无",
+          "type": "string",
+          "enum": [
+            "无",
+            "骰子比大小",
+            "德州扑克",
+            "二十一点",
+            "欧式轮盘"
+          ]
+        },
+        "牌局阶段": {
+          "default": "未开始",
+          "type": "string"
+        },
+        "可操作楼层ID": {
+          "default": -1,
+          "type": "number"
+        },
+        "当前行动角色ID": {
+          "default": "",
+          "type": "string"
+        },
+        "座次": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "座位ID"
+          },
+          "additionalProperties": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "角色ID": {
+                "default": "",
+                "type": "string"
+              },
+              "显示名": {
+                "default": "",
+                "type": "string"
+              },
+              "座位号": {
+                "default": 1,
+                "type": "number"
+              },
+              "筹码": {
+                "default": 0,
+                "type": "number"
+              },
+              "本轮投入": {
+                "default": 0,
+                "type": "number"
+              },
+              "总投入": {
+                "default": 0,
+                "type": "number"
+              },
+              "状态": {
+                "default": "等待",
+                "type": "string",
+                "enum": [
+                  "等待",
+                  "行动中",
+                  "已过牌",
+                  "已跟注",
+                  "已下注",
+                  "已加注",
+                  "已弃牌",
+                  "已全下",
+                  "已停牌",
+                  "已爆牌",
+                  "已结算"
+                ]
+              }
+            }
+          }
+        },
+        "底池": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "主池": {
+              "default": 0,
+              "type": "number"
+            },
+            "边池": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "金额": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "可争夺角色ID": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "公开牌": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "骰点": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "角色ID"
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "轮盘结果": {
+          "default": null,
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "合法动作": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "ID": {
+                "default": "",
+                "type": "string"
+              },
+              "标签": {
+                "default": "",
+                "type": "string"
+              },
+              "最小值": {
+                "default": 0,
+                "type": "number"
+              },
+              "最大值": {
+                "default": 0,
+                "type": "number"
+              },
+              "步长": {
+                "default": 1,
+                "type": "number"
+              },
+              "需要数值": {
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "德州扑克": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "按钮座位ID": {
+              "default": "",
+              "type": "string"
+            },
+            "小盲": {
+              "default": 1,
+              "type": "number"
+            },
+            "大盲": {
+              "default": 2,
+              "type": "number"
+            },
+            "当前下注": {
+              "default": 0,
+              "type": "number"
+            },
+            "最小加注至": {
+              "default": 0,
+              "type": "number"
+            },
+            "已公开手牌": {
+              "default": {},
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "description": "角色ID"
+              },
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "牌型": {
+              "default": {},
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "description": "角色ID"
+              },
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "二十一点": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "玩家各手": {
+              "default": {},
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "description": "手牌ID"
+              },
+              "additionalProperties": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "角色ID": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "牌": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "点数": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "下注": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "状态": {
+                    "default": "等待",
+                    "type": "string"
+                  },
+                  "天然黑杰克": {
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "庄家明牌": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "庄家点数": {
+              "default": 0,
+              "type": "number"
+            },
+            "保险开放": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        },
+        "欧式轮盘": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "下注": {
+              "default": {},
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "description": "下注ID"
+              },
+              "additionalProperties": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "注型": {
+                    "default": "单号",
+                    "type": "string",
+                    "enum": [
+                      "单号",
+                      "分注",
+                      "街注",
+                      "三数注",
+                      "角注",
+                      "首四注",
+                      "线注",
+                      "列注",
+                      "打注",
+                      "红黑",
+                      "单双",
+                      "大小"
+                    ]
+                  },
+                  "覆盖号码": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "选择": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "筹码": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "净赔率": {
+                    "default": 35,
+                    "type": "number"
+                  },
+                  "结果": {
+                    "default": "待定",
+                    "type": "string",
+                    "enum": [
+                      "待定",
+                      "赢",
+                      "输"
+                    ]
+                  },
+                  "派彩": {
+                    "default": 0,
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "开放下注": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        },
+        "事件日志": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "序号": {
+                "default": 0,
+                "type": "number"
+              },
+              "类型": {
+                "default": "系统",
+                "type": "string"
+              },
+              "文本": {
+                "default": "",
+                "type": "string"
+              },
+              "时间": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "$牌局隐藏状态": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "牌堆": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "未公开手牌": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "角色ID"
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "庄家暗牌": {
+          "default": "",
+          "type": "string"
+        },
+        "随机结果": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "待处理决策": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "角色ID"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "事务": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "ID": {
+              "default": "",
+              "type": "string"
+            },
+            "状态": {
+              "default": "空闲",
+              "type": "string",
+              "enum": [
+                "空闲",
+                "暂存",
+                "生成中",
+                "可提交",
+                "失败"
+              ]
+            },
+            "前置楼层ID": {
+              "default": -1,
+              "type": "number"
+            },
+            "错误": {
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
