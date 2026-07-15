@@ -5,6 +5,7 @@ import { fromSmallChips, toSmallChips } from '../界面/状态栏/games/chips';
 import { diceAdapter } from '../界面/状态栏/games/dice';
 import { buildSidePots, holdemAdapter, type HoldemSeat } from '../界面/状态栏/games/holdem';
 import { isRouletteWinner, rouletteAdapter, ROULETTE_ODDS, validateRouletteBet } from '../界面/状态栏/games/roulette';
+import { randomId } from '../界面/状态栏/games/types';
 
 (globalThis as any)._ = lodash;
 
@@ -24,6 +25,14 @@ const assert = {
     if (!thrown) throw new Error('预期函数抛出异常');
   },
 };
+
+const fallbackUuid = randomId({
+  getRandomValues(values) {
+    values.fill(0x11);
+    return values;
+  },
+});
+assert.ok(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(fallbackUuid));
 
 assert.deepEqual(fromSmallChips(31), { 大筹码: 3, 小筹码: 1 });
 assert.equal(toSmallChips({ 大筹码: 3, 小筹码: 1 }), 31);
