@@ -255,34 +255,6 @@ export async function commitGameAction(action: GameAction, utterance = ''): Prom
   await commitAtomic({ userMessage: userText, events, draft });
 }
 
-export async function facilityAction(message: string): Promise<void> {
-  const source = Schema.parse(cloneMvuAt(assertLatestFloor()).stat_data);
-  await commitAtomic({ userMessage: message, events: [{ type: 'facility', text: message }], draft: source });
-}
-
-export async function goToRegion(region: CasinoSchema['系统']['当前区域']): Promise<void> {
-  const source = Schema.parse(cloneMvuAt(assertLatestFloor()).stat_data);
-  const draft = klona(source);
-  draft.系统.当前区域 = region;
-  draft.系统.当前房间 = region === '镜门大堂' ? '迎宾门厅' : '主入口';
-  draft.系统.阶段 = '自由探索';
-  draft.系统.当前玩法 = '无';
-  await commitAtomic({
-    userMessage: `我前往${region}。`,
-    events: [{ type: 'travel', text: `<user>抵达${region}；生成1至3名符合区域职能的女性` }],
-    draft,
-  });
-}
-
-export async function findRole(role: '荷官' | '安保' | '服务人员' | '其他工作人员' | '赌客'): Promise<void> {
-  const source = Schema.parse(cloneMvuAt(assertLatestFloor()).stat_data);
-  await commitAtomic({
-    userMessage: `我在${source.系统.当前区域}寻找一名${role}并与她交谈。`,
-    events: [{ type: 'find-role', text: `生成一名符合当前区域职能的女性${role}，加入当前互动；她具有接受赌局邀请的资格` }],
-    draft: source,
-  });
-}
-
 export async function proposeWager(opponentId: string, userStake: string, opponentStake: string, condition: string): Promise<void> {
   const source = Schema.parse(cloneMvuAt(assertLatestFloor()).stat_data);
   const opponent = source.人物.活动角色[opponentId];

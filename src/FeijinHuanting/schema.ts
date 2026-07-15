@@ -6,7 +6,9 @@ export const Schema = z.object({
     当前玩法: z.enum(['无', '骰子比大小', '德州扑克', '二十一点', '欧式轮盘']).prefault('无'),
   }).prefault({}),
   资产: z.object({
-    筹码预设: z.enum(['未选择', '稳健100万美元', '豪客300万美元', '自定义']).prefault('未选择'),
+    筹码预设: z.enum(['未选择', '稳健100万美元', '豪客300万美元', '100万美元', '300万美元', '自定义'])
+      .transform(value => value === '100万美元' ? '稳健100万美元' : value === '300万美元' ? '豪客300万美元' : value)
+      .prefault('未选择'),
     玩家筹码: z.object({
       大筹码: z.coerce.number().transform(value => _.clamp(Math.floor(Number.isFinite(value) ? value : 0), 0, Number.MAX_SAFE_INTEGER)).prefault(0),
       小筹码: z.coerce.number().transform(value => _.clamp(Math.floor(Number.isFinite(value) ? value : 0), 0, Number.MAX_SAFE_INTEGER)).prefault(0),

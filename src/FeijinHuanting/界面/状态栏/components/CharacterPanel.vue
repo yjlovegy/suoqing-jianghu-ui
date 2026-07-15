@@ -36,7 +36,7 @@
         </div>
       </article>
     </template>
-    <p v-else class="empty">当前没有正在直接互动的女性。可在“设施”页按岗位寻找。</p>
+    <p v-else class="empty">当前没有正在直接互动的女性。请通过剧情继续探索，或与场景中的女性交谈。</p>
   </section>
 </template>
 

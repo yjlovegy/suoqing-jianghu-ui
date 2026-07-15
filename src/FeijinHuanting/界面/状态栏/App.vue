@@ -23,8 +23,7 @@
         <GamePanel v-if="activeTab === '牌桌'" :data="store.data" />
         <CharacterPanel v-else-if="activeTab === '人物'" :characters="store.data.人物.活动角色" />
         <WagerPanel v-else-if="activeTab === '赌约'" :data="store.data" />
-        <AssetPanel v-else-if="activeTab === '资产'" :data="store.data" />
-        <FacilityPanel v-else :current-region="store.data.系统.当前区域" />
+        <AssetPanel v-else :data="store.data" />
       </section>
     </template>
   </main>
@@ -34,14 +33,13 @@
 import { ref } from 'vue';
 import AssetPanel from './components/AssetPanel.vue';
 import CharacterPanel from './components/CharacterPanel.vue';
-import FacilityPanel from './components/FacilityPanel.vue';
 import GamePanel from './components/GamePanel.vue';
 import OpeningPanel from './components/OpeningPanel.vue';
 import WagerPanel from './components/WagerPanel.vue';
 import { useDataStore } from './store';
 
 const store = useDataStore();
-const tabs = ['牌桌', '人物', '赌约', '资产', '设施'] as const;
+const tabs = ['牌桌', '人物', '赌约', '资产'] as const;
 const activeTab = ref<(typeof tabs)[number]>('牌桌');
 </script>
 
@@ -52,7 +50,7 @@ const activeTab = ref<(typeof tabs)[number]>('牌桌');
 .location-mark { display: grid; gap: 4px; text-align: right; }
 .location-mark strong { color: var(--fh-gold); font-family: Georgia, "Noto Serif SC", serif; font-size: 13px; letter-spacing: .1em; }
 .location-mark span { color: var(--fh-muted); font-size: 10px; }
-.tabbar { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--fh-line); }
+.tabbar { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--fh-line); }
 .tabbar button { border: 0; border-right: 1px solid var(--fh-line); background: #0c090a; color: var(--fh-muted); padding: 11px 6px; cursor: pointer; letter-spacing: .12em; }
 .tabbar button:last-child { border-right: 0; }
 .tabbar button.active { color: var(--fh-gold); background: linear-gradient(180deg, rgba(95,16,29,.5), rgba(20,13,15,.9)); box-shadow: inset 0 -2px var(--fh-gold); }
