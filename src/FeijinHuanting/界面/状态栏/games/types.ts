@@ -38,6 +38,11 @@ export type AdapterResult<State> = {
 
 export type RandomSource = () => number;
 
+export type CryptoProvider = {
+  randomUUID?: () => string;
+  getRandomValues?: (values: Uint8Array) => Uint8Array;
+};
+
 export interface GameAdapter<State, Config = unknown> {
   readonly kind: GameKind;
   initialize(config: Config, rng?: RandomSource): State;
@@ -49,10 +54,34 @@ export interface GameAdapter<State, Config = unknown> {
   publicView(state: State, viewerId?: string): Record<string, unknown>;
 }
 
+function runtimeCrypto(): CryptoProvider | undefined {
+  return globalThis.crypto as unknown as CryptoProvider | undefined;
+}
+
+function randomBytes(length: number, provider = runtimeCrypto()): Uint8Array {
+  const values = new Uint8Array(length);
+  if (typeof provider?.getRandomValues === 'function') return provider.getRandomValues(values);
+  for (let index = 0; index < values.length; index += 1) values[index] = Math.floor(Math.random() * 256);
+  return values;
+}
+
+export function randomId(provider = runtimeCrypto()): string {
+  if (typeof provider?.randomUUID === 'function') return provider.randomUUID.call(provider);
+  const values = randomBytes(16, provider);
+  values[6] = (values[6] & 0x0f) | 0x40;
+  values[8] = (values[8] & 0x3f) | 0x80;
+  const hex = Array.from(values, value => value.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 export function secureRandom(): number {
   const values = new Uint32Array(1);
-  crypto.getRandomValues(values);
-  return values[0] / 0x1_0000_0000;
+  const provider = runtimeCrypto();
+  if (typeof provider?.getRandomValues === 'function') {
+    provider.getRandomValues(new Uint8Array(values.buffer));
+    return values[0] / 0x1_0000_0000;
+  }
+  return Math.random();
 }
 
 export function randomInt(min: number, max: number, rng: RandomSource = secureRandom): number {

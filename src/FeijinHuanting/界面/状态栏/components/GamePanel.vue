@@ -63,7 +63,7 @@ import { computed, ref, watch } from 'vue';
 import type { Schema as CasinoSchema } from '../../../schema';
 import { commitGameAction, startGame } from '../controller';
 import type { RouletteBetType } from '../games';
-import { toSmallChips } from '../games';
+import { randomId, toSmallChips } from '../games';
 
 const props = defineProps<{ data: CasinoSchema }>();
 const games = ['骰子比大小', '德州扑克', '二十一点', '欧式轮盘'] as const;
@@ -159,7 +159,7 @@ async function start() {
 async function act() {
   busy.value = true; error.value = '';
   try {
-    const payload = props.data.系统.当前玩法 === '欧式轮盘' && selectedAction.value === 'place-bet' ? { bet: { id: crypto.randomUUID(), playerId: 'user', type: rouletteType.value, numbers: rouletteNumbers(), choice: rouletteChoice.value, amount: amount.value } } : undefined;
+    const payload = props.data.系统.当前玩法 === '欧式轮盘' && selectedAction.value === 'place-bet' ? { bet: { id: randomId(), playerId: 'user', type: rouletteType.value, numbers: rouletteNumbers(), choice: rouletteChoice.value, amount: amount.value } } : undefined;
     await commitGameAction({ id: selectedAction.value, actorId: 'user', amount: currentAction.value?.需要数值 ? amount.value : undefined, payload }, utterance.value);
   } catch (reason) { error.value = reason instanceof Error ? reason.message : String(reason); }
   finally { busy.value = false; }

@@ -1,7 +1,7 @@
 import type { Card } from './cards';
 import { blackjackValue, createDeck } from './cards';
 import type { AdapterResult, GameAdapter, GameEvent, Player } from './types';
-import { assertAction } from './types';
+import { assertAction, randomId } from './types';
 
 export type BlackjackHand = {
   id: string;
@@ -100,7 +100,7 @@ export const blackjackAdapter: GameAdapter<BlackjackState, BlackjackConfig> = {
       if (bet <= 0 || bet % 2 !== 0) throw new Error('二十一点初始下注必须是偶数枚小筹码');
       if (player.chips < bet) throw new Error(`${player.name}筹码不足`);
       player.chips -= bet;
-      state.hands.push({ id: crypto.randomUUID(), playerId: player.id, cards: [], bet, insurance: 0, state: 'playing', splitAces: false, original: true });
+      state.hands.push({ id: randomId(), playerId: player.id, cards: [], bet, insurance: 0, state: 'playing', splitAces: false, original: true });
     }
     for (let round = 0; round < 2; round += 1) {
       for (const hand of state.hands) hand.cards.push(take(state));
@@ -179,7 +179,7 @@ export const blackjackAdapter: GameAdapter<BlackjackState, BlackjackConfig> = {
       player.chips -= hand.bet;
       const splitCard = hand.cards.pop()!;
       const splitAces = hand.cards[0][0] === 'A';
-      const newHand: BlackjackHand = { ...structuredClone(hand), id: crypto.randomUUID(), cards: [splitCard], splitAces, original: false };
+      const newHand: BlackjackHand = { ...structuredClone(hand), id: randomId(), cards: [splitCard], splitAces, original: false };
       hand.splitAces = splitAces; hand.original = false;
       hand.cards.push(take(next)); newHand.cards.push(take(next));
       if (splitAces) {

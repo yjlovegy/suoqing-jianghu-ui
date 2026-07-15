@@ -1,6 +1,6 @@
 import { Schema, type Schema as CasinoSchema } from '../../schema';
 import type { GameAction, GameAdapter, GameEvent, GameKind, Player } from './games';
-import { blackjackValue, fromSmallChips, gameAdapters, isRouletteWinner, ROULETTE_ODDS } from './games';
+import { blackjackValue, fromSmallChips, gameAdapters, isRouletteWinner, randomId, ROULETTE_ODDS } from './games';
 
 type RuntimeAdapter = GameAdapter<any, any>;
 type AtomicOptions = {
@@ -41,7 +41,7 @@ async function commitAtomic(options: AtomicOptions): Promise<void> {
     const sourceMvu = cloneMvuAt(sourceMessageId);
     const protectedDraft = klona(options.draft);
     protectedDraft.$牌局隐藏状态.事务 = {
-      ID: crypto.randomUUID(),
+      ID: randomId(),
       状态: '生成中',
       前置楼层ID: sourceMessageId,
       错误: '',
@@ -217,7 +217,7 @@ export async function startGame(kind: GameKind, players: Player[], config: Recor
   const state = adapter.initialize({ players, ...config });
   draft.系统.当前玩法 = kind;
   draft.系统.阶段 = '牌局进行';
-  draft._牌局公开状态.牌局ID = crypto.randomUUID();
+  draft._牌局公开状态.牌局ID = randomId();
   const opponentName = typeof config.opponentName === 'string' ? config.opponentName : '';
   const opponentRole = typeof config.opponentRole === 'string' ? config.opponentRole : '';
   const matchup = opponentName ? `；互动对手为${opponentName}${opponentRole ? `（${opponentRole}）` : ''}` : '';
@@ -290,7 +290,7 @@ export async function proposeWager(opponentId: string, userStake: string, oppone
   const draft = klona(source);
   draft.系统.阶段 = '赌约协商';
   draft.赌约.当前赌约 = {
-    ID: draft.赌约.当前赌约.ID || crypto.randomUUID(),
+    ID: draft.赌约.当前赌约.ID || randomId(),
     双方: { 甲方: '<user>', 乙方: opponentId },
     各自押注: { 甲方: userStake.trim(), 乙方: opponentStake.trim() },
     胜负条件: condition.trim(),

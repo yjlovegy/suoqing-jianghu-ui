@@ -1,5 +1,5 @@
 import type { AdapterResult, GameAdapter, GameEvent, Player } from './types';
-import { assertAction, randomInt } from './types';
+import { assertAction, randomId, randomInt } from './types';
 
 export type RouletteBetType = '单号' | '分注' | '街注' | '三数注' | '角注' | '首四注' | '线注' | '列注' | '打注' | '红黑' | '单双' | '大小';
 export type RouletteBet = { id: string; playerId: string; type: RouletteBetType; numbers: number[]; choice?: string; amount: number };
@@ -81,7 +81,7 @@ export const rouletteAdapter: GameAdapter<RouletteState, RouletteConfig> = {
     const player = state.players.find(item => item.id === actorId)!;
     const number = randomInt(0, 36, rng);
     const amount = Math.max(1, Math.min(player.chips, 2));
-    return { id: 'place-bet', actorId, amount, payload: { bet: { id: crypto.randomUUID(), playerId: actorId, type: '单号', numbers: [number], amount } } };
+    return { id: 'place-bet', actorId, amount, payload: { bet: { id: randomId(), playerId: actorId, type: '单号', numbers: [number], amount } } };
   },
   settle(state): AdapterResult<RouletteState> {
     if (state.phase !== 'settled') throw new Error('轮盘尚未结算');
